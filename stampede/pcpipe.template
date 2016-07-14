@@ -1,0 +1,35 @@
+#!/bin/bash
+
+echo Started PCPipe at $(date)
+
+module load blast 
+
+BIN="$( readlink -f -- "${0%/*}" )"
+ORFS=${query_dir}
+CLUSTER=${cluster_file}
+OUT_DIR=${outdir:-$HOME/pcpipe-out}
+BLAST=${blast_db:-$WORK/data/simap/blast/simap}
+FEATURES_DB=${features_db:-$WORK/data/simap/features}
+NCPU=${ncpu:-256}
+MIN_CLUSTER_SIZE=${min_cluster_size:-2}
+
+if [[ -s bin.tgz ]]; then
+  tar -xvf bin.tgz
+  export PATH=$PATH:"$PWD/bin"
+else
+  echo Cannot find bin.tgz
+fi
+
+$WORK/stampede-pcpipe/stampede/pcpipe/scripts/run-pcpipe.sh \
+  -d $ORFS \
+  -c $CLUSTER \
+  -o $OUT_DIR \
+  -b $BLAST \
+  -a $FEATURES_DB \
+  -n $NCPU \
+  -s $MIN_CLUSTER_SIZE
+
+# Now, delete the bin/ directory
+rm -rf bin
+
+echo Finished PCPipe at $(date)

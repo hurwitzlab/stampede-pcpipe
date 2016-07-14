@@ -1,0 +1,95 @@
+{
+  "name": "PCPipe",
+  "version": "0.0.2",
+  "helpURI": "http://www.google.com",
+  "label": "PCPipe",
+  "defaultQueue": "normal",
+  "defaultNodeCount": 8,
+  "defaultProcessorsPerNode": 128,
+  "defaultRequestedTime": "24:00:00",
+  "shortDescription": "Clusters proteins and annotates novel hits with SIMAP",
+  "executionSystem": "tacc-stampede-kyclark",
+  "executionType": "HPC",
+  "parallelism": "PARALLEL",
+  "deploymentPath": "kyclark/applications/pcpipe-0.0.2/stampede",
+  "deploymentSystem": "data.iplantcollaborative.org",
+  "templatePath": "template-pcpipe.sh",
+  "testPath": "test.sh",
+  "tags": [
+    "Protein clustering"
+  ],
+  "modules": [
+    "purge",
+    "load TACC",
+    "load blast",
+    "load perl/5.16.2",
+    "load launcher/2.0"
+  ],
+  "inputs": [
+    {
+      "id": "FASTA_DIR",
+      "details": {
+        "label": "Directory of FASTA file containing all peptide sequences to annotate",
+        "description": "",
+        "showAttribute": false
+      },
+      "semantics": {
+        "minCardinality": 1,
+        "ontology": [
+          "http://sswapmeet.sswap.info/mime/application/X-fasta"
+        ],
+        "fileTypes": [
+          "fasta-0", "raw-0"
+        ]
+      },
+      "value": {
+        "default":"",
+        "order": 0,
+        "required": true,
+        "visible": true
+      }
+    },
+    {
+      "id": "CLUSTER_FILE",
+      "details": {
+        "label": "Fasta file containing previously clustered proteins",
+        "description": "",
+        "showAttribute": false
+      },
+      "semantics": {
+        "minCardinality": 1,
+        "ontology": [
+          "http://sswapmeet.sswap.info/mime/application/X-fasta"
+        ],
+        "fileTypes": [
+          "fasta-0", "raw-0"
+        ]
+      },
+      "value": {
+        "default":"",
+        "order": 0,
+        "required": true,
+        "visible": true
+      }
+    }
+  ],
+  "parameters": [{
+        "id": "MIN_CLUSTER_SIZE",
+        "value": {
+            "type": "string",
+            "default": "2",
+            "order": 1,
+            "required": false,
+            "validator": "",
+            "visible": true
+        },
+        "details": {
+            "description": "Minimum number of sequences in a cluster",
+            "label": "Min. Cluster Size",
+            "argument": "",
+            "showArgument": true
+        }
+    }
+  ],
+  "checkpointable": false
+}
