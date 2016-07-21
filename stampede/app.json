@@ -5,7 +5,7 @@
   "label": "PCPipe",
   "defaultQueue": "normal",
   "defaultNodeCount": 8,
-  "defaultProcessorsPerNode": 128,
+  "defaultProcessorsPerNode": 64,
   "defaultRequestedTime": "24:00:00",
   "shortDescription": "Clusters proteins and annotates novel hits with SIMAP",
   "executionSystem": "tacc-stampede-kyclark",
@@ -27,7 +27,7 @@
   ],
   "inputs": [
     {
-      "id": "FASTA_DIR",
+      "id": "IN_DIR",
       "details": {
         "label": "Directory of FASTA file containing all peptide sequences to annotate",
         "description": "",

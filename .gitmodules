@@ -1,0 +1,3 @@
+[submodule "stampede/pcpipe"]
+	path = stampede/pcpipe
+	url = git@github.com:hurwitzlab/pcpipe.git

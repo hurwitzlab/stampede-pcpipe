@@ -1,5 +1,5 @@
 EMAIL = kyclark@email.arizona.edu
-APPID = velvet-1.2.07
+APPID = pcpipe-0.0.2
 
 clean:
 	find . \( -name \*.conf -o -name \*.out -o -name \*.log -o -name \*.params -o -name launcher-\* \) -exec rm {} \;
@@ -7,11 +7,8 @@ clean:
 update:
 	apps-addupdate -F app.json
 
-bingz:
-	rm -f bin.tgz && tar cvzf bin.tgz bin
-
-rmbin:
-	rm -rf bin
-
-upload: bingz rmbin
+upload: 
 	files-upload -F $(WORK)/$(APPID) kyclark/applications
+
+test: clean
+	sbatch test.sh

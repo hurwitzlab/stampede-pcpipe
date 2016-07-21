@@ -1,44 +1,28 @@
 #!/bin/bash
 
+#SBATCH -A iPlant-Collabs
 #SBATCH -J pcpipe
 #SBATCH -N 1
 #SBATCH -n 16
-#SBATCH -p normal
-#SBATCH -o pcpipe-%j.out
+#SBATCH -p development
 #SBATCH -t 02:00:00
 #SBATCH --mail-type=end
 #SBATCH --mail-user=kyclark@email.arizona.edu
 
-echo Started PCPipe at $(date)
+module load blast
+module load perl/5.16.2
 
-module load blast 
+tar zxvf bin.tgz
 
-BIN="$( readlink -f -- "${0%/*}" )"
-ORFS=$WORK/data/pcpipe/test/orfs
-CLUSTER=$WORK/data/pcpipe/test/TOV_43_all_contigs_predicted_proteins.faa
-OUT_DIR=$HOME/pcpipe
-BLAST=${blast_db:-$WORK/data/simap/blast/simap}
-FEATURES_DB=${features_db:-$WORK/data/simap/features}
-NCPU=${NCPU:-256}
-MIN_CLUSTER_SIZE=${MIN_CLUSTER_SIZE:-2}
+PATH=./bin:$PATH
 
-if [[ -s bin.tgz ]]; then
-  tar -xvf bin.tgz
-  export PATH=$PATH:"$PWD/bin"
-else
-  echo Cannot find bin.tgz
-fi
+./pcpipe/run-pcpipe.sh \
+  -d $SCRATCH/pcpipe/orfs \
+  -c $SCRATCH/pcpipe/test.fa \
+  -a $SCRATCH/simap/features \
+  -b $SCRATCH/simap/blast/simap \
+  -o $SCRATCH/pcpipe-out \
+  -s 2 \
+  -n 4
 
-$WORK/stampede-pcpipe/stampede/pcpipe/scripts/run-pcpipe.sh \
-  -d $ORFS \
-  -c $CLUSTER \
-  -o $OUT_DIR \
-  -b $BLAST \
-  -a $FEATURES_DB \
-  -n $NCPU \
-  -s $MIN_CLUSTER_SIZE
-
-# Now, delete the bin/ directory
 rm -rf bin
-
-echo Finished PCPipe at $(date)
